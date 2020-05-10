@@ -139,6 +139,12 @@ class Enemy(Ship):
     def move(self, vel):
         self.y += vel
 
+    def shoot(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x - 28, self.y + 30, self.laser_img)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
+
 #==============================================
 
 
@@ -222,7 +228,7 @@ def main():
             player.x += player_vel
         if keys[pygame.K_w] and player.y - player_vel > 0:  # Up
             player.y -= player_vel
-        if keys[pygame.K_s] and player.y + player_vel + player.get_height() - 20 < HEIGHT:  # Down
+        if keys[pygame.K_s] and player.y + player_vel + player.get_height() - 40 < HEIGHT:  # Down
             player.y += player_vel
         if keys[pygame.K_SPACE]:
             player.shoot()
