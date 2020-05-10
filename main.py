@@ -17,8 +17,8 @@ BLUE_SPACE_SHIP = pygame.image.load(
     os.path.join("assets", "pixel_ship_blue_small.png"))
 
 # Player ship
-YELLOW_SPACE_SHIP = pygame.image.load(
-    os.path.join("assets", "pixel_ship_yellow.png"))
+PLAYER_SPACE_SHIP = pygame.image.load(
+    os.path.join("assets", "player_ship.png"))
 
 # Laser images
 RED_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_red.png"))
@@ -106,7 +106,7 @@ class Ship:
 class Player(Ship):
     def __init__(self, x, y, health=100):
         super().__init__(x, y, health)
-        self.ship_img = YELLOW_SPACE_SHIP
+        self.ship_img = PLAYER_SPACE_SHIP
         self.laser_img = YELLOW_LASER
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
@@ -215,13 +215,13 @@ def main():
                 run = False
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_a] and player.x - player_vel > 0:  # left
+        if keys[pygame.K_a] and player.x - player_vel + 40 > 0:  # left
             player.x -= player_vel
-        if keys[pygame.K_d] and player.x + player_vel + player.get_width() < WIDTH:  # Right
+        if keys[pygame.K_d] and player.x + player_vel + player.get_width() - 40 < WIDTH:  # Right
             player.x += player_vel
         if keys[pygame.K_w] and player.y - player_vel > 0:  # Up
             player.y -= player_vel
-        if keys[pygame.K_s] and player.y + player_vel + player.get_height() < HEIGHT:  # Down
+        if keys[pygame.K_s] and player.y + player_vel + player.get_height() - 20 < HEIGHT:  # Down
             player.y += player_vel
         if keys[pygame.K_SPACE]:
             player.shoot()
