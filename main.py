@@ -29,7 +29,7 @@ YELLOW_LASER = pygame.image.load(
     os.path.join("assets", "pixel_laser_yellow.png"))
 
 BG = pygame.transform.scale(pygame.image.load(
-    os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
+    os.path.join("assets", "atmosphere-background.png")), (WIDTH, HEIGHT))
 #==============================================
 
 
