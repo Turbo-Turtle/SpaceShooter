@@ -37,7 +37,7 @@ BG = pygame.transform.scale(pygame.image.load(
 
 class Laser:
     def __init__(self, x, y, img):
-        self.x = x
+        self.x = x + 36
         self.y = y
         self.img = img
         self.mask = pygame.mask.from_surface(self.img)
@@ -49,7 +49,7 @@ class Laser:
         self.y += vel
 
     def off_screen(self, height):
-        return self.y <= height and self.y >= 0
+        return not (self.y <= height and self.y >= 0)
 
     def collision(self, obj):
         return collide(self, obj)
@@ -123,8 +123,7 @@ class Player(Ship):
                 for obj in objs:
                     if laser.collision(obj):
                         objs.remove(obj)
-                        if laser in self.lasers:
-                            self.laser.remove(laser)
+                        self.lasers.remove(laser)
 #=========================
 
 
@@ -146,7 +145,7 @@ class Enemy(Ship):
 def collide(obj1, obj2):
     offset_x = obj2.x - obj1.x
     offset_y = obj2.y - obj1.y
-    return obj1.mask.overlap(obj2.mask(offset_x, offset_y)) != None
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
 
 
 def main():
@@ -231,11 +230,15 @@ def main():
         for enemy in enemies[:]:
             enemy.move(enemy_vel)
             enemy.move_lasers(laser_vel, player)
+
+            if random.randrange(0, 2 * 60) == 1:
+                enemy.shoot()
+
             if enemy.y + enemy.get_height() > HEIGHT:
                 lives -= 1
                 enemies.remove(enemy)
 
-        player.move_lasers(laser_vel, enemies)
+        player.move_lasers(-laser_vel, enemies)
 
 
 main()
