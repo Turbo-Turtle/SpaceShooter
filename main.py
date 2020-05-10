@@ -9,24 +9,26 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("My Space Shooter")
 
 # Load images
-RED_SPACE_SHIP = pygame.image.load(
-    os.path.join("assets", "pixel_ship_red_small.png"))
-GREEN_SPACE_SHIP = pygame.image.load(
-    os.path.join("assets", "pixel_ship_green_small.png"))
-BLUE_SPACE_SHIP = pygame.image.load(
-    os.path.join("assets", "pixel_ship_blue_small.png"))
+ENEMY_SCOUT_SHIP = pygame.image.load(
+    os.path.join("assets", "enemy_scout_ship.png"))
+ENEMY_FIGHTER_SHIP = pygame.image.load(
+    os.path.join("assets", "enemy_fighter_ship.png"))
+ENEMY_ASSAULT_SHIP = pygame.image.load(
+    os.path.join("assets", "enemy_assault_ship.png"))
 
 # Player ship
 PLAYER_SPACE_SHIP = pygame.image.load(
     os.path.join("assets", "player_ship.png"))
 
 # Laser images
-RED_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_red.png"))
-GREEN_LASER = pygame.image.load(
-    os.path.join("assets", "pixel_laser_green.png"))
-BLUE_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_blue.png"))
-YELLOW_LASER = pygame.image.load(
-    os.path.join("assets", "pixel_laser_yellow.png"))
+ENEMY_SCOUT_LASER = pygame.image.load(
+    os.path.join("assets", "enemy_scout_laser.png"))
+ENEMY_FIGHTER_LASER = pygame.image.load(
+    os.path.join("assets", "enemy_fighter_laser.png"))
+ENEMY_ASSAULT_LASER = pygame.image.load(
+    os.path.join("assets", "enemy_assault_laser.png"))
+PLAYER_LASER = pygame.image.load(
+    os.path.join("assets", "player_laser.png"))
 
 BG = pygame.transform.scale(pygame.image.load(
     os.path.join("assets", "atmosphere-background.png")), (WIDTH, HEIGHT))
@@ -107,7 +109,7 @@ class Player(Ship):
     def __init__(self, x, y, health=100):
         super().__init__(x, y, health)
         self.ship_img = PLAYER_SPACE_SHIP
-        self.laser_img = YELLOW_LASER
+        self.laser_img = PLAYER_LASER
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
 
@@ -127,12 +129,12 @@ class Player(Ship):
 
 
 class Enemy(Ship):
-    COLOR_MAP = {"red": (RED_SPACE_SHIP, RED_LASER), "green": (
-        GREEN_SPACE_SHIP, GREEN_LASER), "blue": (BLUE_SPACE_SHIP, BLUE_LASER)}
+    UNIT_MAP = {"scout": (ENEMY_SCOUT_SHIP, ENEMY_SCOUT_LASER), "fighter": (
+        ENEMY_FIGHTER_SHIP, ENEMY_FIGHTER_LASER), "assault": (ENEMY_ASSAULT_SHIP, ENEMY_ASSAULT_LASER)}
 
-    def __init__(self, x, y, color, health=100):
+    def __init__(self, x, y, unit, health=100):
         super().__init__(x, y, health)
-        self.ship_img, self.laser_img = self.COLOR_MAP[color]
+        self.ship_img, self.laser_img = self.UNIT_MAP[unit]
         self.mask = pygame.mask.from_surface(self.ship_img)
 
     def move(self, vel):
@@ -207,7 +209,7 @@ def main():
             wave_length += 5
             for i in range(wave_length):
                 enemy = Enemy(random.randrange(
-                    50, WIDTH - 100), random.randrange(-1500, -100), random.choice(["red", "blue", "green"]))
+                    50, WIDTH - 100), random.randrange(-1500, -100), random.choice(["scout", "fighter", "assault"]))
                 enemies.append(enemy)
 
         for event in pygame.event.get():
