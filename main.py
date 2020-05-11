@@ -190,7 +190,7 @@ def main():
         WIN.blit(BG, (0, 0))
 
         lives_label = main_font.render(f"Lives: {lives}", 1, (255, 255, 255))
-        level_label = main_font.render(f"Level: {level}", 1, (0, 0, 255))
+        level_label = main_font.render(f"Level: {level}", 1, (145, 0, 0))
 
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
