@@ -3,6 +3,9 @@ import os
 import time
 import random
 pygame.font.init()
+# frequency, size, channels, buffersize
+pygame.mixer.pre_init(44100, 16, 2, 4096)
+pygame.init()
 
 WIDTH, HEIGHT = 750, 750
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -32,6 +35,13 @@ PLAYER_LASER = pygame.image.load(
 
 BG = pygame.transform.scale(pygame.image.load(
     os.path.join("assets", "atmosphere-background.png")), (WIDTH, HEIGHT))
+
+INGAME_MUSIC = pygame.mixer.music.load("Music.mp3")
+PLAYER_THRUST = pygame.mixer.Sound("Thrust.wav")
+
+PLAYER_FIRE = pygame.mixer.Sound("Fire.wav")
+
+
 #==============================================
 
 
@@ -181,6 +191,8 @@ def main():
 
     player = Player(300, 620)
 
+    pygame.mixer.music.play(-1)
+
     clock = pygame.time.Clock()
 
     lost = False
@@ -203,6 +215,7 @@ def main():
         if lost:
             lost_label = lost_font.render("You Lost!!", 1, (255, 255, 255))
             WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
+            pygame.mixer.music.fadeout(1600)
 
         pygame.display.update()
 
@@ -234,6 +247,7 @@ def main():
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and player.x - player_vel + 40 > 0:  # left
+
             player.x -= player_vel
         if keys[pygame.K_d] and player.x + player_vel + player.get_width() - 40 < WIDTH:  # Right
             player.x += player_vel
@@ -242,6 +256,7 @@ def main():
         if keys[pygame.K_s] and player.y + player_vel + player.get_height() - 40 < HEIGHT:  # Down
             player.y += player_vel
         if keys[pygame.K_SPACE]:
+            pygame.mixer.Sound.play(PLAYER_FIRE)
             player.shoot()
 
         for enemy in enemies[:]:
