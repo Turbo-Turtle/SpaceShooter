@@ -37,13 +37,21 @@ BG = pygame.transform.scale(pygame.image.load(
     os.path.join("assets", "atmosphere-background.png")), (WIDTH, HEIGHT))
 
 INGAME_MUSIC = pygame.mixer.music.load("Metal Work M92.mp3")
-PLAYER_THRUST = pygame.mixer.Sound("Thrust.wav")
 
 PLAYER_FIRE = pygame.mixer.Sound("Fire.wav")
 PLAYER_FIRE.set_volume(0.1)
 
-PLAYER_HIT = pygame.mixer.Sound("Hit.wav")
-PLAYER_HIT.set_volume(1.0)
+PLAYER_DAMAGE = pygame.mixer.Sound("Damage.wav")
+PLAYER_DAMAGE.set_volume(1.0)
+
+PLAYER_ALARM = pygame.mixer.Sound("Alarm.wav")
+PLAYER_ALARM.set_volume(0.4)
+
+DEAD = pygame.mixer.Sound("Dead.wav")
+DEAD.set_volume(1.0)
+
+ENEMY_HIT = pygame.mixer.Sound("EnemyHit.wav")
+ENEMY_HIT.set_volume(1.0)
 
 GQ = pygame.mixer.Sound("GQ.wav")
 GQ.set_volume(0.4)
@@ -97,6 +105,7 @@ class Ship:
             if laser.off_screen(HEIGHT):
                 self.lasers.remove(laser)
             elif laser.collision(obj):
+                pygame.mixer.Sound.play(PLAYER_DAMAGE)
                 obj.health -= 10
                 self.lasers.remove(laser)
 
@@ -138,6 +147,7 @@ class Player(Ship):
             else:
                 for obj in objs:
                     if laser.collision(obj):
+                        pygame.mixer.Sound.play(ENEMY_HIT)
                         objs.remove(obj)
                         if laser in self.lasers:
                             self.lasers.remove(laser)
@@ -221,6 +231,7 @@ def main():
         if lost:
             lost_label = lost_font.render("You Lost!!", 1, (255, 255, 255))
             WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
+            pygame.mixer.Sound.play(DEAD)
             pygame.mixer.music.fadeout(1600)
 
         pygame.display.update()
@@ -273,7 +284,7 @@ def main():
                 enemy.shoot()
 
             if collide(enemy, player):
-                pygame.mixer.Sound.play(PLAYER_HIT)
+                pygame.mixer.Sound.play(PLAYER_ALARM)
                 player.health -= 10
                 enemies.remove(enemy)
             elif enemy.y + enemy.get_height() > HEIGHT:
