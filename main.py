@@ -18,6 +18,8 @@ ENEMY_FIGHTER_SHIP = pygame.image.load(
     os.path.join("assets", "enemy_fighter_ship.png"))
 ENEMY_ASSAULT_SHIP = pygame.image.load(
     os.path.join("assets", "enemy_assault_ship.png"))
+PETE = pygame.image.load(
+    os.path.join("assets", "PETE.png"))
 
 # Player ship
 PLAYER_SPACE_SHIP = pygame.image.load(
@@ -36,7 +38,8 @@ PLAYER_LASER = pygame.image.load(
 BG = pygame.transform.scale(pygame.image.load(
     os.path.join("assets", "atmosphere-background.png")), (WIDTH, HEIGHT))
 
-INGAME_MUSIC = pygame.mixer.music.load("Metal Work M92.mp3")
+MENU_MUSIC = pygame.mixer.music.load("MenuMusic.mp3")
+
 
 PLAYER_FIRE = pygame.mixer.Sound("Fire.wav")
 PLAYER_FIRE.set_volume(0.1)
@@ -45,7 +48,7 @@ PLAYER_DAMAGE = pygame.mixer.Sound("Damage.wav")
 PLAYER_DAMAGE.set_volume(1.0)
 
 PLAYER_ALARM = pygame.mixer.Sound("Alarm.wav")
-PLAYER_ALARM.set_volume(0.4)
+PLAYER_ALARM.set_volume(0.6)
 
 DEAD = pygame.mixer.Sound("Dead.wav")
 DEAD.set_volume(1.0)
@@ -207,6 +210,7 @@ def main():
 
     player = Player(300, 620)
 
+    INGAME_MUSIC = pygame.mixer.music.load("Metal Work M92.mp3")
     pygame.mixer.music.play(-1)
 
     clock = pygame.time.Clock()
@@ -229,7 +233,8 @@ def main():
         player.draw(WIN)
 
         if lost:
-            lost_label = lost_font.render("You Lost!!", 1, (255, 255, 255))
+            lost_label = lost_font.render(
+                "You died...", 1, (255, 255, 255))
             WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
             pygame.mixer.Sound.play(DEAD)
             pygame.mixer.music.fadeout(1600)
@@ -297,16 +302,19 @@ def main():
 def main_menu():
     title_font = pygame.font.SysFont("comicsans", 70)
     run = True
+    pygame.mixer.music.load("MenuMusic.mp3")
+    pygame.mixer.music.play(-1)
     while run:
         WIN.blit(BG, (0, 0))
         title_label = title_font.render(
-            "Press the mouse to begin...", 1, (255, 255, 255))
+            "The invasion has begun...", 1, (255, 255, 255))
         WIN.blit(title_label, (WIDTH / 2 - title_label.get_width() / 2, 350))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(GQ)
                 main()
 
