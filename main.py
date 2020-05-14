@@ -36,11 +36,17 @@ PLAYER_LASER = pygame.image.load(
 BG = pygame.transform.scale(pygame.image.load(
     os.path.join("assets", "atmosphere-background.png")), (WIDTH, HEIGHT))
 
-INGAME_MUSIC = pygame.mixer.music.load("Music.mp3")
+INGAME_MUSIC = pygame.mixer.music.load("Metal Work M92.mp3")
 PLAYER_THRUST = pygame.mixer.Sound("Thrust.wav")
 
 PLAYER_FIRE = pygame.mixer.Sound("Fire.wav")
+PLAYER_FIRE.set_volume(0.1)
 
+PLAYER_HIT = pygame.mixer.Sound("Hit.wav")
+PLAYER_HIT.set_volume(1.0)
+
+GQ = pygame.mixer.Sound("GQ.wav")
+GQ.set_volume(0.4)
 
 #==============================================
 
@@ -267,6 +273,7 @@ def main():
                 enemy.shoot()
 
             if collide(enemy, player):
+                pygame.mixer.Sound.play(PLAYER_HIT)
                 player.health -= 10
                 enemies.remove(enemy)
             elif enemy.y + enemy.get_height() > HEIGHT:
@@ -289,6 +296,7 @@ def main_menu():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                pygame.mixer.Sound.play(GQ)
                 main()
 
     pygame.quit()
